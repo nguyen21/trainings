@@ -1,10 +1,18 @@
 package com.example.postgresdemo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "answers")
@@ -21,7 +29,9 @@ public class Answer extends AuditModel {
     @Column(columnDefinition = "text")
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(
+            fetch = FetchType.LAZY, optional = false
+    )
     @JoinColumn(name = "question_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore

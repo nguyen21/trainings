@@ -1,9 +1,11 @@
 package com.example.postgresdemo.controller;
 
+import com.example.postgresdemo.dto.AnswerDTO;
 import com.example.postgresdemo.exception.ResourceNotFoundException;
 import com.example.postgresdemo.model.Answer;
 import com.example.postgresdemo.repository.AnswerRepository;
 import com.example.postgresdemo.repository.QuestionRepository;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,20 @@ public class AnswerController {
     @GetMapping("/questions/{questionId}/answers")
     public List<Answer> getAnswersByQuestionId(@PathVariable Long questionId) {
         return answerRepository.findByQuestionId(questionId);
+    }
+
+    @GetMapping("dto/questions/{questionId}/answers")
+    public List<AnswerDTO> getAnswersDTOByQuestionId(@PathVariable Long questionId) {
+        List<Answer> byQuestionId = answerRepository.findByQuestionId(questionId);
+        List<AnswerDTO> answerDTOList = new ArrayList<>();
+        byQuestionId.forEach( answer -> {
+            AnswerDTO answerDTO = new AnswerDTO();
+            answerDTO.setId(answer.getId());
+            answerDTO.setText(answer.getText());
+            answerDTO.setQuestionId(answer.getQuestion().getId());
+            answerDTOList.add(answerDTO);
+        });
+        return answerDTOList;
     }
 
     @PostMapping("/questions/{questionId}/answers")
